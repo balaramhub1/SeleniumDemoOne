@@ -12,21 +12,20 @@ import org.testng.annotations.Test;
 import java.time.Duration;
 
 public class LoginTest {
+    public static void main(String[] args) throws InterruptedException {
+        // No Abstraction
 
-    WebDriver driver;
-    Actions action;
-    @BeforeClass
-    void setUp(){
+        // Test Setup Steps
+        ChromeDriver driver;
+        Actions action;
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
         driver.manage().window().maximize();
         action = new Actions(driver);
-    }
 
-    @Test
-    void LoginToApp() throws InterruptedException {
+        // Login into the App.
         driver.get("https://snapdeal.com/");
-        dismissOfferNotification();
+        dismissOfferNotification(driver);
         Thread.sleep(3000);
         WebElement signInSection = driver.findElement(By.xpath("//span[starts-with(@class,'accountUserName')]"));
         action.moveToElement(signInSection).build().perform();
@@ -34,16 +33,14 @@ public class LoginTest {
         WebElement loginBtn = driver.findElement(By.xpath("//a[text()='login']"));
         //action.moveToElement(loginBtn).build().perform();
         loginBtn.click();
-    }
 
-    @AfterClass
-    void tearDown() throws InterruptedException {
+        // tear down
         Thread.sleep(3000);
         driver.close();
         driver.quit();
     }
 
-    void dismissOfferNotification(){
+    static void dismissOfferNotification(ChromeDriver driver){
         try{
             driver.findElement(By.id("pushDenied")).click();
         }catch(Exception e){
